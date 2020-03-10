@@ -19,8 +19,8 @@ Plugin 'tpope/vim-fugitive'
 " Git plugin not hosted on GitHub
 Plugin 'git://git.wincent.com/command-t.git'
 " git repos on your local machine (i.e. when working on your own plugin)
-Plugin 'file:///home/gmarik/path/to/plugin'
 " The sparkup vim script is in a subdirectory of this repo called vim.
+
 " Pass the path to set the runtimepath properly.
 Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
 " Install L9 and avoid a Naming conflict if you've already installed a
@@ -46,14 +46,53 @@ filetype plugin indent on    " required
 Plugin 'universal-ctags/ctags'
 Plugin 'jistr/vim-nerdtree-tabs'
 Plugin 'rodnaph/vim-color-schemes'
-
+Plugin 'sheerun/vim-polyglot'
+Plugin 'kien/ctrlp.vim'
+Plugin 'severin-lemaignan/vim-minimap'
+Plugin 'ap/vim-buftabline'
+"
 
 " personal settings
 set number
+colo 256jungle
+set ts=4
+syntax on
+set clipboard=unnamed
+set scroll=1
+
+set statusline=%<%f%<%{FileTime()}%<%h%m%r%=%-20.(line=%03l,col=%02c%V,totlin=%L%)\%h%m%r%=%-30(,BfNm=%n%Y%)\%P\*%=%{CurTime()}
+set rulerformat=%15(%c%V\ %p%%%)
+"set rulerformat=%<%f%<%{FileTime()}%<%h%m%r%=%-20.(line=%03l,col=%02c%V,totlin=%L%)\%h%m%r%=%-30(,BfNm=%n%Y%)\%P\*%=%{CurTime()}
+
+function! FileTime()
+  let ext=tolower(expand("%:e"))
+  let fname=tolower(expand('%<'))
+  let filename=fname . '.' . ext
+  let msg=""
+  let msg=msg." ".strftime("(Modified %b,%d %y %H:%M:%S)",getftime(filename))
+  return msg
+endfunction
+
+function! CurTime()
+  let ftime=""
+  let ftime=ftime." ".strftime("%b,%d %y %H:%M:%S")
+  return ftime
+endfunction
+
 
 " Vim Completes Me autocmd setting
 autocmd FileType vim let b:vcm_tab_complete = 'vim'
 
 filetype plugin on
-set omnifunc=syntaxcomplete#Complete
+" set omnifunc=syntaxcomplete#Complete
+set statusline=%f               " filename relative to current $PWD
+set statusline+=%h              " help file flag
+set statusline+=%m              " modified flag
+set statusline+=%r              " readonly flag
+set statusline+=\ [%{&ff}]      " Fileformat [unix]/[dos] etc...
+set statusline+=\ (%{strftime(\"%Y-%m-%d\ %H:%M\",getftime(expand(\"%:p\")))})  " last modified timestamp
+set statusline+=%=              " Rest: right align
+set statusline+=%l,%c%V         " Position in buffer: linenumber, column, virtual column
+set statusline+=\ %P            " Position in buffer: Percentage
 
+set laststatus=2
