@@ -45,20 +45,24 @@ filetype plugin indent on    " required
 " Plugins
 Plugin 'universal-ctags/ctags'
 Plugin 'jistr/vim-nerdtree-tabs'
-Plugin 'rodnaph/vim-color-schemes'
 Plugin 'sheerun/vim-polyglot'
 Plugin 'kien/ctrlp.vim'
 Plugin 'severin-lemaignan/vim-minimap'
 Plugin 'ap/vim-buftabline'
-"
-
+Plugin 'ervandew/supertab'
+Plugin 'mileszs/ack.vim'
 " personal settings
 set number
-colo 256jungle
 set ts=4
 syntax on
 set clipboard=unnamed
 set scroll=1
+set nospell
+colorscheme neon-dark-256
+
+" keybindings
+nnoremap <C-up> k<C-y>
+nnoremap <C-down> j<C-e>
 
 set statusline=%<%f%<%{FileTime()}%<%h%m%r%=%-20.(line=%03l,col=%02c%V,totlin=%L%)\%h%m%r%=%-30(,BfNm=%n%Y%)\%P\*%=%{CurTime()}
 set rulerformat=%15(%c%V\ %p%%%)
@@ -96,3 +100,40 @@ set statusline+=%l,%c%V         " Position in buffer: linenumber, column, virtua
 set statusline+=\ %P            " Position in buffer: Percentage
 
 set laststatus=2
+
+" show whitespace
+set listchars=tab:--,trail:·,extends:>,precedes:<,space:·
+set list
+" highlight search result
+set hlsearch
+
+" search
+set grepprg=ag\ --vimgrep\ $*
+set grepformat=%f:%l:%c:%m
+"
+" vim flash current search result
+if exists("g:loaded_blink_search") || v:version < 700 || &cp
+  finish
+endif
+let g:loaded_blink_search = 1
+
+nnoremap <silent> n n:call <SID>BlinkCurrentMatch()<CR>
+nnoremap <silent> N N:call <SID>BlinkCurrentMatch()<CR>
+
+function! s:BlinkCurrentMatch()
+  let target = '\c\%#'.@/
+  let match = matchadd('IncSearch', target)
+  redraw
+  sleep 100m
+  call matchdelete(match)
+  redraw
+endfunction
+
+" Format code
+autocmd BufWritePost *.h,*.cc,*.cpp,*.c !(eto repo cf <afile>)
+
+
+let g:spelunker_highlight_type = 2
+
+
+
