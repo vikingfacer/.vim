@@ -47,17 +47,19 @@ Plugin 'universal-ctags/ctags'
 Plugin 'jistr/vim-nerdtree-tabs'
 Plugin 'sheerun/vim-polyglot'
 Plugin 'kien/ctrlp.vim'
-Plugin 'severin-lemaignan/vim-minimap'
 Plugin 'ap/vim-buftabline'
-Plugin 'ervandew/supertab'
-Plugin 'mileszs/ack.vim'
+Plugin 'vim-scripts/AutoComplPop'
+Plugin 'MarcWeber/vim-addon-mw-utils'
+Plugin 'tomtom/tlib_vim'
+Plugin 'garbas/vim-snipmate'
+
 " personal settings
 set number
 set ts=4
 syntax on
 set clipboard=unnamed
 set scroll=1
-set nospell
+set spell
 colorscheme neon-dark-256
 
 " keybindings
@@ -129,9 +131,19 @@ function! s:BlinkCurrentMatch()
   redraw
 endfunction
 
+" C & CPP autocmds
 " Format code
 autocmd BufWritePost *.h,*.cc,*.cpp,*.c !(eto repo cf <afile>)
 
+autocmd BufNewFile *.c 0r ~/.vim/skeleton-files/skeleton.c
+autocmd bufnewfile *.c exe "1,".4."g/<current-year>*/s//" .strftime("%Y")
+
+autocmd BufNewFile *.h 0r ~/.vim/skeleton-files/skeleton.h
+autocmd bufnewfile *.h exe "1,".4."g/<current-year>*/s//" .strftime("%Y")
+autocmd bufnewfile *.h exe "%s/filename/".expand("%:t")
+
+" Python autocmds
+autocmd BufWritePost *.py !(black <afile>)
 
 let g:spelunker_highlight_type = 2
 
