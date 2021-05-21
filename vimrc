@@ -1,66 +1,27 @@
 set nocompatible              " be iMproved, required
 filetype off                  " required
-
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 " alternatively, pass a path where Vundle should install plugins
 "call vundle#begin('~/some/path/here')
-
-" let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
-" The following are examples of different formats supported.
-" Keep Plugin commands between vundle#begin/end.
-" plugin on GitHub repo
-Plugin 'tpope/vim-fugitive'
-" plugin from http://vim-scripts.org/vim/scripts.html
-" Plugin 'L9'
-" Git plugin not hosted on GitHub
-Plugin 'git://git.wincent.com/command-t.git'
-" git repos on your local machine (i.e. when working on your own plugin)
-" The sparkup vim script is in a subdirectory of this repo called vim.
-
-" Pass the path to set the runtimepath properly.
-Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
-" Install L9 and avoid a Naming conflict if you've already installed a
-" different version somewhere else.
-" Plugin 'ascenator/L9', {'name': 'newL9'}
-
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
-" To ignore plugin indent changes, instead use:
-"filetype plugin on
-"
-" Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-"
-" see :h vundle for more details or wiki for FAQ
-" Put your non-Plugin stuff after this line
-
 " Plugins
-Plugin 'universal-ctags/ctags'
 Plugin 'jistr/vim-nerdtree-tabs'
 Plugin 'sheerun/vim-polyglot'
 Plugin 'kien/ctrlp.vim'
 Plugin 'ap/vim-buftabline'
-Plugin 'vim-scripts/AutoComplPop'
-Plugin 'MarcWeber/vim-addon-mw-utils'
-Plugin 'tomtom/tlib_vim'
-Plugin 'garbas/vim-snipmate'
+Plugin 'rust-lang/rust.vim'
+Plugin 'prabirshrestha/async.vim'
+Plugin 'prabirshrestha/vim-lsp'
+Plugin 'ajh17/vimcompletesme'
 
-" personal settings
-set number
-set ts=4
-syntax on
-set clipboard=unnamed
-set scroll=1
-set spell
-colorscheme neon-dark-256
+" Color scheme
+Plugin 'kien/rainbow_parentheses.vim'
+
+call vundle#end()
+filetype plugin indent on    " required
 
 " keybindings
 nnoremap <C-up> k<C-y>
@@ -84,7 +45,6 @@ function! CurTime()
   let ftime=ftime." ".strftime("%b,%d %y %H:%M:%S")
   return ftime
 endfunction
-
 
 " Vim Completes Me autocmd setting
 autocmd FileType vim let b:vcm_tab_complete = 'vim'
@@ -131,9 +91,33 @@ function! s:BlinkCurrentMatch()
   redraw
 endfunction
 
-" C & CPP autocmds
+" C & CPP files
+function ClangFormatBuffer()
+  if &modified && !empty(findfile('.clang-format', expand('%:p:h') . ';'))
+    let cursor_pos = getpos('.')
+    :%!clang-format
+    call setpos('.', cursor_pos)
+  endif
+endfunction
+
+" language server protocol
+if executable('clangd')
+    augroup lsp_clangd
+        autocmd!
+        autocmd User lsp_setup call lsp#register_server({
+                    \ 'name': 'clangd',
+                    \ 'cmd': {server_info->['clangd']},
+                    \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
+                    \ })
+        autocmd FileType c setlocal omnifunc=lsp#complete
+        autocmd FileType cpp setlocal omnifunc=lsp#complete
+        autocmd FileType objc setlocal omnifunc=lsp#complete
+        autocmd FileType objcpp setlocal omnifunc=lsp#complete
+    augroup end
+endif
+
 " Format code
-autocmd BufWritePost *.h,*.cc,*.cpp,*.c !(eto repo cf <afile>)
+autocmd BufWritePre *.h,*.hpp,*.c,*.cpp,*.vert,*.frag :call ClangFormatBuffer()
 
 autocmd BufNewFile *.c 0r ~/.vim/skeleton-files/skeleton.c
 autocmd bufnewfile *.c exe "1,".4."g/<current-year>*/s//" .strftime("%Y")
@@ -142,10 +126,50 @@ autocmd BufNewFile *.h 0r ~/.vim/skeleton-files/skeleton.h
 autocmd bufnewfile *.h exe "1,".4."g/<current-year>*/s//" .strftime("%Y")
 autocmd bufnewfile *.h exe "%s/filename/".expand("%:t")
 
+
 " Python autocmds
+if executable('black')
 autocmd BufWritePost *.py !(black <afile>)
+endif
+if executable("pyls")
+    " pip install python-language-server
+    augroup lsp_pyls
+        autocmd!
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'pyls',
+        \ 'cmd': {server_info->['pyls']},
+        \ 'allowlist': ['python'],
+        \ })
+        autocmd FileType py setlocal omnifunc=lsp#complete
+    augroup lsp_pyls
+endif
+
+" Rust autocmds
+if executable('rls')
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'rls',
+        \ 'cmd': {server_info->['rustup', 'run', 'stable', 'rls']},
+        \ 'workspace_config': {'rust': {'clippy_preference': 'on'}},
+        \ 'whitelist': ['rust'],
+        \ })
+        autocmd FileType py setlocal omnifunc=lsp#complete
+endif
+
+
+"·Rainbow·settings¬
+au VimEnter * RainbowParenthesesToggle
+au Syntax * RainbowParenthesesLoadRound
+au Syntax * RainbowParenthesesLoadSquare
+au Syntax * RainbowParenthesesLoadBraces
+
 
 let g:spelunker_highlight_type = 2
 
-
-
+" personal settings
+set number
+set ts=4
+syntax on
+set clipboard=unnamed
+set scroll=1
+set spell
+colorscheme neon-dark-256

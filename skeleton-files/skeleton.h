@@ -1,5 +1,5 @@
 /*
- * Veo Robotics, Inc. - Copyright (c) <current-year>
+ * Jacob Montpetit
  *
  * Description:
  */
