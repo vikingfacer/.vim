@@ -128,6 +128,7 @@ autocmd bufnewfile *.h exe "%s/filename/".expand("%:t")
 
 
 " Python autocmds
+autocmd BufNewFile *.py 0r ~/.vim/skeleton-files/skeleton.py
 if executable('black')
 autocmd BufWritePost *.py !(black <afile>)
 endif
