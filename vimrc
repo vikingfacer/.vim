@@ -174,6 +174,14 @@ if executable('zls')
   autocmd FileType zig setlocal omnifunc=lsp#complete
 endif
 
+if executable('rnix-lsp')
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'rnix-lsp',
+        \ 'cmd': {server_info->[&shell, &shellcmdflag, 'rnix-lsp']},
+        \ 'whitelist': ['nix'],
+        \ })
+endif
+
 "·Rainbow·settings¬
 au VimEnter * RainbowParenthesesToggle
 au Syntax * RainbowParenthesesLoadRound
