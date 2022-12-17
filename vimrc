@@ -21,6 +21,7 @@ Plug 'rust-lang/rust.vim'
 Plug 'prabirshrestha/async.vim'
 Plug 'prabirshrestha/vim-lsp'
 Plug 'ajh17/vimcompletesme'
+Plug 'kergoth/vim-bitbake'
 
 " Color scheme
 Plug 'kien/rainbow_parentheses.vim'
