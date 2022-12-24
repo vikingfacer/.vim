@@ -184,6 +184,10 @@ if executable('rnix-lsp')
         \ })
 endif
 
+if executable('nixfmt')
+  autocmd BufWritePost *.nix !(nixfmt <afile>)
+endif
+
 "·Rainbow·settings¬
 au VimEnter * RainbowParenthesesToggle
 au Syntax * RainbowParenthesesLoadRound
