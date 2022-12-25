@@ -1,34 +1,6 @@
 set nocompatible              " be iMproved, required
-filetype off                  " required
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-
-let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
-if empty(glob(data_dir . '/autoload/plug.vim'))
-  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-endif
-
-call plug#begin('~/.vim/plugged')
-" alternatively, pass a path where Vundle should install plugins
-
-" Plugins
-Plug 'jistr/vim-nerdtree-tabs'
-Plug 'sheerun/vim-polyglot'
-Plug 'kien/ctrlp.vim'
-Plug 'ap/vim-buftabline'
-Plug 'rust-lang/rust.vim'
-Plug 'prabirshrestha/async.vim'
-Plug 'prabirshrestha/vim-lsp'
-Plug 'ajh17/vimcompletesme'
-Plug 'kergoth/vim-bitbake'
-Plug 'LnL7/vim-nix'
-
-" Color scheme
-Plug 'kien/rainbow_parentheses.vim'
-
-call plug#end()
 filetype plugin indent on    " required
+
 
 " keybindings
 nnoremap <C-up> k<C-y>
