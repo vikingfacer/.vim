@@ -177,3 +177,7 @@ set clipboard=unnamed
 set scroll=1
 set spell
 colorscheme neon-dark-256
+
+
+" Commands
+command Copy :'<,'>w !xclip -selection clipboard
