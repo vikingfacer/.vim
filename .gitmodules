@@ -13,9 +13,6 @@
 [submodule "pack/plugins/start/vim-lsp"]
 	path = pack/plugins/start/vim-lsp
 	url = https://github.com/prabirshrestha/vim-lsp
-[submodule "pack/plugins/start/vimcompletesme"]
-	path = pack/plugins/start/vimcompletesme
-	url = https://github.com/ajh17/vimcompletesme
 [submodule "pack/plugins/start/vim-bitbake"]
 	path = pack/plugins/start/vim-bitbake
 	url = https://github.com/kergoth/vim-bitbake
@@ -28,3 +25,21 @@
 [submodule "pack/plugins/start/zig.vim"]
 	path = pack/plugins/start/zig.vim
 	url = https://github.com/ziglang/zig.vim
+[submodule "pack/plugins/start/haskell-vim"]
+	path = pack/plugins/start/haskell-vim
+	url = https://github.com/neovimhaskell/haskell-vim
+[submodule "pack/plugins/start/ultisnips"]
+	path = pack/plugins/start/ultisnips
+	url = https://github.com/SirVer/ultisnips
+[submodule "pack/plugins/start/vim-lsp-snippets"]
+	path = pack/plugins/start/vim-lsp-snippets
+	url = https://github.com/thomasfaingnaert/vim-lsp-snippets
+[submodule "pack/plugins/start/vim-lsp-ultisnips"]
+	path = pack/plugins/start/vim-lsp-ultisnips
+	url = https://github.com/thomasfaingnaert/vim-lsp-ultisnips
+[submodule "pack/plugins/start/asyncomplete.vim"]
+	path = pack/plugins/start/asyncomplete.vim
+	url = https://github.com/prabirshrestha/asyncomplete.vim
+[submodule "pack/plugins/start/asyncomplete-lsp.vim"]
+	path = pack/plugins/start/asyncomplete-lsp.vim
+	url = https://github.com/prabirshrestha/asyncomplete-lsp.vim
