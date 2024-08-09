@@ -36,11 +36,7 @@ function! CurTime()
   return ftime
 endfunction
 
-" Vim Completes Me autocmd setting
-autocmd FileType vim let b:vcm_tab_complete = 'vim'
 
-filetype plugin on
-" set omnifunc=syntaxcomplete#Complete
 set statusline=%f               " filename relative to current $PWD
 set statusline+=%h              " help file flag
 set statusline+=%m              " modified flag
