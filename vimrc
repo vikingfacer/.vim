@@ -126,8 +126,10 @@ syntax on
 set clipboard=unnamed
 set scroll=1
 set spell
-colorscheme neon-dark-256
 
+" colorc scheme for defaults
+" hi Normal guibg=NONE ctermbg=NONE
+colorscheme shades_of_purple
 
 " Commands
 command Copy :'<,'>w !xclip -selection clipboard
