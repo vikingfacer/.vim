@@ -56,7 +56,9 @@ set list
 set hlsearch
 
 " search
+if executable('ag')
 set grepprg=ag\ --vimgrep\ $*
+endif
 set grepformat=%f:%l:%c:%m
 "
 " vim flash current search result
