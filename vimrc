@@ -132,4 +132,5 @@ set spell
 colorscheme shades_of_purple
 
 " Commands
-command Copy :'<,'>w !xclip -selection clipboard
+command -range Copy <line1>,<line2> w !xclip -selection clipboard
+command Sudowrite :w !sudo tee %
