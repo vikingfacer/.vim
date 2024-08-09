@@ -81,95 +81,36 @@ function! s:BlinkCurrentMatch()
   redraw
 endfunction
 
+autocmd BufWritePre * :%s/\s\+$//e
+
+filetype plugin on
+
+let g:lsp_auto_enable = 1
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <cr>    pumvisible() ? asyncomplete#close_popup() : "\<cr>"
+
+
 " C & CPP files
-function ClangFormatBuffer()
-  if &modified && !empty(findfile('.clang-format', expand('%:p:h') . ';'))
-    let cursor_pos = getpos('.')
-    :%!clang-format
-    call setpos('.', cursor_pos)
-  endif
-endfunction
-
-" language server protocol
-if executable('clangd')
-    augroup lsp_clangd
-        autocmd!
-        autocmd User lsp_setup call lsp#register_server({
-                    \ 'name': 'clangd',
-                    \ 'cmd': {server_info->['clangd']},
-                    \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
-                    \ })
-        autocmd FileType c setlocal omnifunc=lsp#complete
-        autocmd FileType cpp setlocal omnifunc=lsp#complete
-        autocmd FileType objc setlocal omnifunc=lsp#complete
-        autocmd FileType objcpp setlocal omnifunc=lsp#complete
-    augroup end
-endif
-
-" Format code
-autocmd BufWritePre *.h,*.hpp,*.c,*.cpp,*.vert,*.frag :call ClangFormatBuffer()
-
-autocmd BufNewFile *.c 0r ~/.vim/skeleton-files/skeleton.c
-autocmd bufnewfile *.c exe "1,".4."g/<current-year>*/s//" .strftime("%Y")
-
-autocmd BufNewFile *.h 0r ~/.vim/skeleton-files/skeleton.h
-autocmd bufnewfile *.h exe "1,".4."g/<current-year>*/s//" .strftime("%Y")
-autocmd bufnewfile *.h exe "%s/filename/".expand("%:t")
-
+so ~/.vim/clang-setup.vim
 
 " Python autocmds
-autocmd BufNewFile *.py 0r ~/.vim/skeleton-files/skeleton.py
-if executable('black')
-autocmd BufWritePost *.py !(black <afile>)
-endif
-if executable("pylsp")
-    " pip install python-language-server
-    augroup lsp_pyls
-        autocmd!
-    au User lsp_setup call lsp#register_server({
-        \ 'name': 'pyls',
-        \ 'cmd': {server_info->['pylsp']},
-        \ 'allowlist': ['python'],
-        \ })
-        autocmd FileType py setlocal omnifunc=lsp#complete
-    augroup lsp_pyls
-endif
+so ~/.vim/python-setup.vim
 
 " Rust autocmds
-if executable('rls')
-    au User lsp_setup call lsp#register_server({
-        \ 'name': 'rls',
-        \ 'cmd': {server_info->['rustup', 'run', 'stable', 'rls']},
-        \ 'workspace_config': {'rust': {'clippy_preference': 'on'}},
-        \ 'whitelist': ['rust'],
-        \ })
-        autocmd FileType rs setlocal omnifunc=lsp#complete
+so ~/.vim/rust-setup.vim
+
+" Zig autocmds
+so ~/.vim/zig-setup.vim
+
+" Nix autocmds
+so ~/.vim/nix-setup.vim
+
+
+if executable('stylish-haskell')
+  autocmd BufWritePost *.hs !(stylish-haskell <afile>)
 endif
 
-if executable('zig')
-  autocmd BufWritePost *.zig !(zig fmt <afile>)
-endif
-
-if executable('zls')
-  au User lsp_setup call lsp#register_server({
-        \ 'name' : 'zls',
-        \ 'cmd' : {server_info->['zls']},
-        \ 'whitelist' : ['zig'],
-        \ })
-  autocmd FileType zig setlocal omnifunc=lsp#complete
-endif
-
-if executable('rnix-lsp')
-    au User lsp_setup call lsp#register_server({
-        \ 'name': 'rnix-lsp',
-        \ 'cmd': {server_info->[&shell, &shellcmdflag, 'rnix-lsp']},
-        \ 'whitelist': ['nix'],
-        \ })
-endif
-
-if executable('nixfmt')
-  autocmd BufWritePost *.nix !(nixfmt <afile>)
-endif
 
 "·Rainbow·settings¬
 au VimEnter * RainbowParenthesesToggle
